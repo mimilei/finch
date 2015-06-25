@@ -33,4 +33,12 @@ class PetstoreDbSpec extends FlatSpec with Matchers with Checkers {
   it should "fail appropriately for pet ids that don't exist" in new DbContext {
     assert(Await.result(db.getPet(1001)) === None)
   }
+
+  it should "allow for the updating of existing pets with Json" in new DbContext {
+    check{
+      (id:Long, name:String) =>
+        val json = s"""{ "id": $id, "name": "$name", "photoUrls":  }"""
+    }
+  }
+
 }
