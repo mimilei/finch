@@ -12,7 +12,7 @@ import shapeless.ops.coproduct.Folder
 
 /**
  * Represents a conversion from a router returning a result type `A` to a
- * Finagle service from a request-like type `R` to a [[Response]].
+ * Finagle service from a request-like type `R` to a [[com.twitter.finagle.httpx.Response]].
  */
 @implicitNotFound(
 """You can only convert a router into a Finagle service from ${R} to an Response if ${R} can be
@@ -20,9 +20,6 @@ converted into an Request, and if the result type of the router is one of the fo
 
   * An Response
   * A value of a type with an EncodeResponse instance
-  * A future of an Response
-  * A future of a value of a type with an EncodeResponse instance
-  * A RequestReader that returns a value of a type with an EncodeResponse instance
   * A Finagle service that returns an Response
   * A Finagle service that returns a value of a type with an EncodeResponse instance
   * A coproduct made up of some combination of the above
@@ -57,21 +54,22 @@ trait LowPriorityToServiceInstances {
       routerToService(router.map(polyCase(_)))
   }
 
-  protected def routerToService[R: ToRequest](r: Router[Service[R, Response]]): Service[R, Response] =
-    Service.mk[R, Response] { req =>
-      r(RouterInput(implicitly[ToRequest[R]].apply(req))) match {
-        case Some((output, service)) if output.path.isEmpty => service(req)
-        case _ => NotFound().toFuture
-      }
+  protected def routerToService[R: ToRequest](router: Router[Service[R, Response]]): Service[R, Response] =
+    new Service[R, Response] {
+       import Router._
+       def apply(req: R): Future[Response] = router(Input(implicitly[ToRequest[R]].apply(req))) match {
+         case Some((input, result)) if input.isEmpty => result().flatMap(_(req))
+         case _ => NotFound().toFuture
+       }
     }
 
   /**
    * A polymorphic function value that accepts types that can be transformed into a Finagle service from a request-like
-   * type to a [[Response]].
+   * type to a [[com.twitter.finagle.httpx.Response]].
    */
   protected object EncodeAll extends Poly1 {
     /**
-     * Transforms an [[Response]] directly into a constant service.
+     * Transforms an [[com.twitter.finagle.httpx.Response]] directly into a constant service.
      */
     implicit def response[R: ToRequest]: Case.Aux[Response, Service[R, Response]] =
       at(r => Service.const(r.toFuture))
@@ -83,7 +81,7 @@ trait LowPriorityToServiceInstances {
       at(a => Service.const(Ok(a).toFuture))
 
     /**
-     * Transforms an [[Response]] in a future into a constant service.
+     * Transforms an [[com.twitter.finagle.httpx.Response]] in a future into a constant service.
      */
     implicit def futureResponse[R: ToRequest]: Case.Aux[Future[Response], Service[R, Response]] =
       at(Service.const)
@@ -95,13 +93,13 @@ trait LowPriorityToServiceInstances {
       at(fa => Service.const(fa.map(Ok(_))))
 
     /**
-     * Transforms a [[RequestReader]] into a service.
+     * Transforms a [[io.finch.request.RequestReader]] into a service.
      */
     implicit def requestReader[R: ToRequest, A: EncodeResponse]: Case.Aux[RequestReader[A], Service[R, Response]] =
       at(reader => Service.mk(req => reader(implicitly[ToRequest[R]].apply(req)).map(Ok(_))))
 
     /**
-     * An identity transformation for services that return an [[Response]].
+     * An identity transformation for services that return a [[com.twitter.finagle.httpx.Response]].
      *
      * Note that the service may have a static type that is more specific than `Service[R, Response]`.
      */

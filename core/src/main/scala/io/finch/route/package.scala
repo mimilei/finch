@@ -1,25 +1,3 @@
-/*
- * Copyright 2015, by Vladimir Kostyukov and Contributors.
- *
- * This file is a part of a Finch library that may be found at
- *
- *      https://github.com/finagle/finch
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Contributor(s): -
- */
-
 package io.finch
 
 import com.twitter.finagle.Service
@@ -53,15 +31,16 @@ package object route extends RouterCombinators {
   /**
    * An alias for [[io.finch.route.Router Router]] that maps route to a [[com.twitter.finagle.Service Service]].
    */
+  @deprecated(message = "Endpoint is deprecated in favor of coproduct routers", since = "0.8.0")
   type Endpoint[A, B] = Router[Service[A, B]]
 
   type Router0 = Router[HNil]
   type Router2[A, B] = Router[A :: B :: HNil]
   type Router3[A, B, C] = Router[A :: B :: C :: HNil]
 
-  implicit def stringToMatcher(s: String): Router0 = Matcher(s)
-  implicit def intToMatcher(i: Int): Router0 = Matcher(i.toString)
-  implicit def booleanToMatcher(b: Boolean): Router0 = Matcher(b.toString)
+  implicit def stringToMatcher(s: String): Router0 = new Matcher(s)
+  implicit def intToMatcher(i: Int): Router0 = new Matcher(i.toString)
+  implicit def booleanToMatcher(b: Boolean): Router0 = new Matcher(b.toString)
 }
 
 package route {
@@ -71,7 +50,7 @@ package route {
   case class RouteNotFound(r: String) extends Exception(s"Route not found: $r")
 
   /**
-   * We need a version of [[shapeless.adjoin.Adjoin]] that provides slightly different behavior in
+   * We need a version of [[shapeless.ops.adjoin.Adjoin]] that provides slightly different behavior in
    * the case of singleton results (we simply return the value, not a singleton `HList`).
    */
   trait PairAdjoin[A, B] extends DepFn2[A, B]

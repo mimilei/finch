@@ -1,25 +1,3 @@
-/*
- * Copyright 2014, by Vladimir Kostyukov and Contributors.
- *
- * This file is a part of a Finch library that may be found at
- *
- *      https://github.com/finagle/finch
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Contributor(s): -
- */
-
 package io.finch
 
 import com.twitter.util.Future
@@ -36,6 +14,7 @@ import com.twitter.finagle.httpx.service.NotFoundService
  * @tparam Req the request type
  * @tparam Rep the response type
  */
+@deprecated(message = "Endpoint is deprecated in favor of coproduct routers", since = "0.8.0")
 trait Endpoint[Req, Rep] { self =>
 
   /**
@@ -100,6 +79,7 @@ trait Endpoint[Req, Rep] { self =>
 /**
  * A companion object for ''Endpoint''
  */
+@deprecated(message = "Endpoint is deprecated in favor of coproduct routers", since = "0.8.0")
 object Endpoint {
 
   /**
@@ -147,6 +127,7 @@ object Endpoint {
    *
    * @return a service that delegates the requests to the underlying endpoint
    */
+  @deprecated(message = "Endpoint is deprecated in favor of coproduct routers", since = "0.8.0")
   implicit def endpointToService[Req, Rep](e: Endpoint[Req, Rep])(implicit ev: Req => Request): Service[Req, Rep] =
     new Service[Req, Rep] {
       def apply(req: Req): Future[Rep] = e.route(req.method -> Path(req.path))(req)
