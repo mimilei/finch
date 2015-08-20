@@ -37,7 +37,8 @@ class PetstoreDbSpec extends FlatSpec with Matchers with Checkers {
 
   //GET: getPet
   "The Petstore DB" should "allow pet lookup by id" in new DbContext {
-    assert(Await.result(db.getPet(0)) === rover.copy(id = Some(0)))
+    assert(Await.result(db.getPet(0)) === rover.copy(id = Some(0), category = Some(Category(Some(0), "dog")),
+      tags = Some(Seq(Tag(Some(0), "puppy"), Tag(Some(1), "white")))))
   }
 
   it should "fail appropriately when asked to get pet ids that don't exist" in new DbContext {
@@ -52,7 +53,7 @@ class PetstoreDbSpec extends FlatSpec with Matchers with Checkers {
       val result = for {
         petId <- db.addPet(petInput)
         newPet <- db.getPet(petId)
-      } yield newPet === pet.copy(id = Some(petId))
+      } yield newPet.copy(category = None, tags = Some(Nil)) === pet.copy(id = Some(petId), category = None, tags = Some(Nil))
 
       Await.result(result)
      }

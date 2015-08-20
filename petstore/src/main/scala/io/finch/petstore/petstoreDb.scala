@@ -58,7 +58,7 @@ class PetstoreDb {
    */
   private def addCat(c: Category): Future[Category] =
     cat.synchronized {
-      c.id match{
+      c.id match {
         case Some(x) => Future.exception(InvalidInput("New Category should not contain an id"))
         case None => cat.synchronized{
           val genId = if (cat.isEmpty) 0 else cat.keys.max + 1
@@ -78,20 +78,31 @@ class PetstoreDb {
     inputPet.id match {
       case Some(_) => Future.exception(InvalidInput("New pet should not contain an id"))
       case None => pets.synchronized {
-        val id = if (pets.isEmpty) 0 else pets.keys.max + 1
-        pets(id) = inputPet.copy(id = Some(id))
+        val genId = if (pets.isEmpty) 0 else pets.keys.max + 1
 
-        inputPet.tags match{
-          case Some(tagList) => tagList.map(addTag)
-          case None => None
+        val updatedTagsFut: Future[Seq[Tag]] = inputPet.tags match{ //Future[Seq[Tag]]
+          case Some(tagList) => {
+            Future.collect(tagList.map(addTag))
+          }
+//          case Some(tagList) => tagList.map(addTag)
+          case None => Future.Nil
         }
 
-        inputPet.category match{
-          case Some(c) => addCat(c)
-          case None => None
+        inputPet.category match{ //Future[Category]
+          case Some(c) => {
+            for {
+              updatedTags <- updatedTagsFut
+              updatedCat <- addCat(c)
+            } yield pets(genId) = inputPet.copy(id = Some(genId), tags = Some(updatedTags), category = Some(updatedCat))
+          }
+          case None => {
+            for {
+              updatedTags <- updatedTagsFut
+            } yield pets(genId) = inputPet.copy(id = Some(genId), tags = Some(updatedTags))
+          }
         }
 
-        Future.value(id)
+        Future.value(genId)
       }
     }
 

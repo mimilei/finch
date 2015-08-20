@@ -20,12 +20,13 @@
             "properties": {
                 "id": {
                     "format": "int64",
-                    "type": "integer"
+                    "type": "long"
                 },
                 "name": {
                     "type": "string"
                 }
             },
+            "required": ["name"],
             "type": "object",
             "xml": {
                 "name": "Category"
@@ -33,21 +34,20 @@
         },
         "Order": {
             "properties": {
-                "complete": {
-                    "default": false,
-                    "type": "boolean"
-                },
                 "id": {
                     "format": "int64",
-                    "type": "integer"
+                    "type": "long",
+                    "example": ""
                 },
                 "petId": {
                     "format": "int64",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 2
                 },
                 "quantity": {
                     "format": "int32",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 10
                 },
                 "shipDate": {
                     "format": "date-time",
@@ -61,6 +61,10 @@
                         "delivered"
                     ],
                     "type": "string"
+                },
+                "complete": {
+                  "default": false,
+                  "type": "boolean"
                 }
             },
             "type": "object",
@@ -70,35 +74,31 @@
         },
         "Pet": {
             "properties": {
-                "category": {
-                    "$ref": "#/definitions/Category"
-                },
                 "id": {
                     "format": "int64",
-                    "type": "integer"
+                    "type": "long",
+                    "example": ""
                 },
                 "name": {
-                    "example": "doggie",
-                    "type": "string"
+                    "type": "string",
+                    "example": "Coco"
                 },
                 "photoUrls": {
                     "items": {
                         "type": "string"
                     },
                     "type": "array",
+                    "example": ["url_to_coco_pic"],
                     "xml": {
                         "name": "photoUrl",
                         "wrapped": true
                     }
                 },
-                "status": {
-                    "description": "pet status in the store",
-                    "enum": [
-                        "available",
-                        "pending",
-                        "sold"
-                    ],
-                    "type": "string"
+                "category": {
+                  "$ref": "#/definitions/Category",
+                  "example": {
+                    "name": "Cat"
+                  }
                 },
                 "tags": {
                     "items": {
@@ -108,7 +108,20 @@
                     "xml": {
                         "name": "tag",
                         "wrapped": true
-                    }
+                    },
+                    "example": [
+                      {"name": "white"},
+                      {"name": "persian"}
+                    ]
+                },
+                "status": {
+                  "description": "pet status in the store",
+                  "enum": [
+                    "available",
+                    "pending",
+                    "adopted"
+                  ],
+                  "type": "string"
                 }
             },
             "required": [
@@ -130,6 +143,7 @@
                     "type": "string"
                 }
             },
+            "required": ["name"],
             "type": "object",
             "xml": {
                 "name": "Tag"
@@ -137,95 +151,149 @@
         },
         "User": {
             "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "firstName": {
-                    "type": "string"
-                },
                 "id": {
-                    "format": "int64",
-                    "type": "integer"
-                },
-                "lastName": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "userStatus": {
-                    "description": "User Status",
-                    "format": "int32",
-                    "type": "integer"
+                  "format": "int64",
+                  "type": "long",
+                  "example": ""
                 },
                 "username": {
-                    "type": "string"
+                  "type": "string",
+                  "example": "coraline"
+                },
+                "firstName": {
+                    "type": "string",
+                    "example": "Coraline"
+                },
+                "lastName": {
+                    "type": "string",
+                    "example": "Jones"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "yellow_raincoat@gmail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "blackcat"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "408-000-0000"
                 }
             },
             "type": "object",
+            "required": ["username", "password"],
             "xml": {
                 "name": "User"
             }
+        },
+      "UpdatePetInputBody": {
+        "properties": {
+          "id": {
+            "format": "int64",
+            "type": "long"
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "photoUrls": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "xml": {
+              "name": "photoUrl",
+              "wrapped": true
+            }
+          },
+          "category": {
+            "$ref": "#/definitions/InputCat"
+          },
+          "tags": {
+            "items": {
+              "$ref": "#/definitions/InputTag"
+            },
+            "type": "array",
+            "xml": {
+              "name": "tag",
+              "wrapped": true
+            }
+          },
+          "status": {
+            "description": "pet status in the store",
+            "enum": [
+              "available",
+              "pending",
+              "adopted"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": ["id", "name", "photoUrls"],
+        "example": {
+          "id": 0,
+          "name": "Rumpleteazer",
+          "photoUrls": ["someUrl"],
+          "category": {
+            "name": "Cat"
+          },
+          "tags": [
+            {
+              "name": "orange"
+            },
+            {
+              "name": "tabby"
+            }
+          ],
+          "status": "available"
+        },
+        "xml": {
+          "name": "Pet"
         }
+      }
     },
     "externalDocs": {
-        "description": "Find out more about Swagger",
-        "url": "http://swagger.io"
+        "description": "Find out more about Finch:",
+        "url": "https://github.com/finagle/finch"
     },
     "host": "localhost:8080",
     "info": {
         "contact": {
-            "email": "apiteam@swagger.io"
+            "gittr": "https://gitter.im/finagle/finch"
         },
-        "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
-        "termsOfService": "http://swagger.io/terms/",
-        "title": "Swagger Petstore",
+        "description": "This is a sample server Petstore server built using Finch. This API is based off the Swagger petstore demo (http://petstore.swagger.io).",
+        "title": "Finch Petstore",
         "version": "1.0.0"
     },
     "paths": {
         "/pet": {
             "post": {
                 "consumes": [
-                    "application/json",
-                    "application/xml"
+                    "application/json"
                 ],
-                "description": "",
+                "description": "Allows you to add a new pet to the petstore! Note: Any body passed in as a potential pet should not have an id. Neither should Category or Tag objects. Ids should be auto-generated only!",
                 "operationId": "addPet",
                 "parameters": [
-                    {
-                        "description": "Pet object that needs to be added to the store",
-                        "in": "body",
-                        "name": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/Pet"
-                        }
+                  {
+                    "description": "Pet object that needs to be added to the store",
+                    "in": "body",
+                    "name": "body",
+                    "required": true,
+                    "schema": {
+                      "$ref": "#/definitions/Pet"
                     }
+                  }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
-                    "405": {
+                    "404": {
                         "description": "Invalid input"
                     }
                 },
-                "security": [
-                    {
-                        "petstore_auth": [
-                            "write:pets",
-                            "read:pets"
-                        ]
-                    }
-                ],
                 "summary": "Add a new pet to the store",
                 "tags": [
                     "pet"
@@ -233,10 +301,9 @@
             },
             "put": {
                 "consumes": [
-                    "application/json",
-                    "application/xml"
+                    "application/json"
                 ],
-                "description": "",
+                "description": "Allows you to update existing pets in the store! Bodies given as input must include an ID so the API knows which pet to update. As with addPet, any added categories or tags should not have IDs.",
                 "operationId": "updatePet",
                 "parameters": [
                     {
@@ -250,28 +317,13 @@
                     }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Invalid ID supplied"
-                    },
                     "404": {
-                        "description": "Pet not found"
-                    },
-                    "405": {
-                        "description": "Validation exception"
+                        "description": "The pet to be updated cannot be found"
                     }
                 },
-                "security": [
-                    {
-                        "petstore_auth": [
-                            "write:pets",
-                            "read:pets"
-                        ]
-                    }
-                ],
                 "summary": "Update an existing pet",
                 "tags": [
                     "pet"
@@ -280,7 +332,7 @@
         },
         "/pet/findByStatus": {
             "get": {
-                "description": "Multiple status values can be provided with comma seperated strings",
+                "description": "Multiple status values can be provided with comma-seperated strings",
                 "operationId": "findPetsByStatus",
                 "parameters": [
                     {
@@ -302,7 +354,6 @@
                     }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
@@ -319,14 +370,6 @@
                         "description": "Invalid status value"
                     }
                 },
-                "security": [
-                    {
-                        "petstore_auth": [
-                            "write:pets",
-                            "read:pets"
-                        ]
-                    }
-                ],
                 "summary": "Finds Pets by status",
                 "tags": [
                     "pet"
@@ -335,7 +378,7 @@
         },
         "/pet/findByTags": {
             "get": {
-                "description": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
+                "description": "Muliple tags can be provided with comma-seperated strings. Use 'white' and 'fluffy' for testing.",
                 "operationId": "findPetsByTags",
                 "parameters": [
                     {
@@ -351,7 +394,6 @@
                     }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
@@ -388,22 +430,15 @@
                 "operationId": "deletePet",
                 "parameters": [
                     {
-                        "in": "header",
-                        "name": "api_key",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
                         "description": "Pet id to delete",
                         "format": "int64",
                         "in": "path",
                         "name": "petId",
                         "required": true,
-                        "type": "integer"
+                        "type": "long"
                     }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
@@ -411,14 +446,6 @@
                         "description": "Invalid pet value"
                     }
                 },
-                "security": [
-                    {
-                        "petstore_auth": [
-                            "write:pets",
-                            "read:pets"
-                        ]
-                    }
-                ],
                 "summary": "Deletes a pet",
                 "tags": [
                     "pet"
@@ -496,22 +523,16 @@
                     }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
-                    "405": {
-                        "description": "Invalid input"
+                    "400": {
+                      "description": "Invalid input!"
+                    },
+                    "404": {
+                        "description": "The pet to be updated does not exist!"
                     }
                 },
-                "security": [
-                    {
-                        "petstore_auth": [
-                            "write:pets",
-                            "read:pets"
-                        ]
-                    }
-                ],
                 "summary": "Updates a pet in the store with form data",
                 "tags": [
                     "pet"
@@ -621,7 +642,6 @@
                     }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
@@ -727,7 +747,6 @@
                     }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
@@ -760,7 +779,6 @@
                     }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
@@ -793,7 +811,6 @@
                     }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
@@ -802,79 +819,6 @@
                     }
                 },
                 "summary": "Creates list of users with given input array",
-                "tags": [
-                    "user"
-                ]
-            }
-        },
-        "/user/login": {
-            "get": {
-                "description": "",
-                "operationId": "loginUser",
-                "parameters": [
-                    {
-                        "description": "The user name for login",
-                        "in": "query",
-                        "name": "username",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "description": "The password for login in clear text",
-                        "in": "query",
-                        "name": "password",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "produces": [
-                    "application/xml",
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "headers": {
-                            "X-Expires-After": {
-                                "description": "date in UTC when toekn expires",
-                                "format": "date-time",
-                                "type": "string"
-                            },
-                            "X-Rate-Limit": {
-                                "description": "calls per hour allowed by the user",
-                                "format": "int32",
-                                "type": "integer"
-                            }
-                        },
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid username/password supplied"
-                    }
-                },
-                "summary": "Logs user into the system",
-                "tags": [
-                    "user"
-                ]
-            }
-        },
-        "/user/logout": {
-            "get": {
-                "description": "",
-                "operationId": "logoutUser",
-                "parameters": [],
-                "produces": [
-                    "application/xml",
-                    "application/json"
-                ],
-                "responses": {
-                    "default": {
-                        "description": "successful operation"
-                    }
-                },
-                "summary": "Logs out current logged in user session",
                 "tags": [
                     "user"
                 ]
@@ -894,7 +838,6 @@
                     }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
@@ -923,7 +866,6 @@
                     }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
@@ -946,7 +888,7 @@
                 ]
             },
             "put": {
-                "description": "This can only be done by the logged in user.",
+                "description": "This must be passed with the exact username of the user you want to update! Usernames cannot change.",
                 "operationId": "updateUser",
                 "parameters": [
                     {
@@ -967,7 +909,6 @@
                     }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {

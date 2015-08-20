@@ -9,7 +9,7 @@ import com.twitter.util.{Future, Await}
  */
 class PetstoreApp {
   val db = new PetstoreDb()
-  db.addPet(Pet(None, "Sadaharu", Nil, Some(Category(None, "inugami")), Some(Nil), Some(Available)))
+  db.addPet(Pet(None, "Sadaharu", Nil, Some(Category(None, "inugami")), Some(Seq(Tag(None, "white"), Tag(None, "fluffy"))), Some(Available)))
   db.addPet(Pet(None, "Despereaux", Nil, Some(Category(None, "mouse")), Some(Nil), Some(Available)))
   db.addPet(Pet(None, "Alexander", Nil, Some(Category(None, "mouse")), Some(Nil), Some(Pending)))
   db.addPet(Pet(None, "Wilbur", Nil, Some(Category(None, "pig")), Some(Nil), Some(Adopted)))
