@@ -292,6 +292,9 @@
                 "responses": {
                     "404": {
                         "description": "Invalid input"
+                    },
+                    "400": {
+                        "description": "Bad input: You probably omitted a required field"
                     }
                 },
                 "summary": "Add a new pet to the store",
@@ -332,7 +335,7 @@
         },
         "/pet/findByStatus": {
             "get": {
-                "description": "Multiple status values can be provided with comma-seperated strings",
+                "description": "In a real use-case, multiple status values can be provided with comma-separated strings. If you're using the UI to interact with the path, simply holding down command (on Mac) will allow you to select more than one status to search for.",
                 "operationId": "findPetsByStatus",
                 "parameters": [
                     {
@@ -465,7 +468,6 @@
                     }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
@@ -475,11 +477,8 @@
                             "$ref": "#/definitions/Pet"
                         }
                     },
-                    "400": {
-                        "description": "Invalid ID supplied"
-                    },
                     "404": {
-                        "description": "Pet not found"
+                        "description": "Pet not found / invalid ID supplied"
                     }
                 },
                 "security": [
@@ -676,15 +675,14 @@
                     }
                 ],
                 "produces": [
-                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Invalid ID supplied"
+                    "200": {
+                        "description": "Response body is 'true' if the order was successfully deleted. It is 'false' if the order does not exist."
                     },
                     "404": {
-                        "description": "Order not found"
+                        "description": "Invalid ID supplied"
                     }
                 },
                 "summary": "Delete purchase order by ID",
@@ -718,11 +716,8 @@
                             "$ref": "#/definitions/Order"
                         }
                     },
-                    "400": {
-                        "description": "Invalid ID supplied"
-                    },
                     "404": {
-                        "description": "Order not found"
+                        "description": "Order not found (a message will be printed) or an invalid ID was supplied."
                     }
                 },
                 "summary": "Find purchase order by ID",
@@ -841,9 +836,6 @@
                     "application/json"
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Invalid username supplied"
-                    },
                     "404": {
                         "description": "User not found"
                     }
@@ -874,9 +866,6 @@
                         "schema": {
                             "$ref": "#/definitions/User"
                         }
-                    },
-                    "400": {
-                        "description": "Invalid username supplied"
                     },
                     "404": {
                         "description": "User not found"
@@ -912,9 +901,6 @@
                     "application/json"
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Invalid user supplied"
-                    },
                     "404": {
                         "description": "User not found"
                     }

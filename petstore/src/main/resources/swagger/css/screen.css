@@ -821,7 +821,7 @@
     overflow-y: auto;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.put div.heading {
-    background-color: #fff8e8;
+    background-color: #ffe8b6;
     /* border: 1px solid #f0e0ca; */
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.put div.heading h3 span.http_method a {
@@ -836,8 +836,8 @@
     color: #c5862b;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.put div.content {
-    background-color: #faf5ee;
-    border: 1px solid #f0e0ca;
+    background-color: #fff8e8;
+    border: 2px dashed #ffe8b6;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.put div.content h4 {
     color: #c5862b;
@@ -874,7 +874,7 @@
     color: #6fc992;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.delete div.heading {
-    background-color: #ffe8eb;
+    background-color: #f4abba;
     /* border: 1px solid #e8c6c7; */
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.delete div.heading h3 span.http_method a {
@@ -890,8 +890,8 @@
     color: #a41e22;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.delete div.content {
-    background-color: #f7eded;
-    border: 1px solid #e8c6c7;
+    background-color: #ffe8eb;
+    border: 2px dashed #f4abba;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.delete div.content h4 {
     color: #a41e22;
@@ -900,7 +900,7 @@
     color: #c8787a;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.post div.heading {
-    background-color: #edf5e9;
+    background-color: #c6e5b3;
     /* border: 1px solid #c3e8d1; */
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.post div.heading h3 span.http_method a {
@@ -915,8 +915,8 @@
     color: #5c913b;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.post div.content {
-    background-color: #ebf7f0;
-    border: 1px solid #c3e8d1;
+    background-color: #edf5e9;
+    border: 2px dashed #c6e5b3;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.post div.content h4 {
     color: #10a54a;
@@ -950,7 +950,7 @@
     color: #dcb67f;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.get div.heading {
-    background-color: #e7f0f7;
+    background-color: #bbddf5;
     /* border: 1px solid #c3d9ec; */
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.get div.heading h3 span.http_method a {
@@ -965,8 +965,8 @@
     color: #0f6ab4;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.get div.content {
-    background-color: #ebf3f9;
-    border: 1px solid #c3d9ec;
+    background-color: #f2f9ff;
+    border: 2px dashed #bbddf5;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.get div.content h4 {
     color: #0f6ab4;
@@ -1226,7 +1226,7 @@
     padding: 14px;
 }
 .swagger-section #header a#logo {
-    font-size: 2em;
+    font-size: 2.4em;
     font-weight: 500;
     font-stretch: extra-expanded;
     text-decoration: none;
@@ -1247,6 +1247,7 @@
     clear: none;
     float: left;
     margin: 0 10px 0 0;
+    /* padding: 5px 5px 5px 5px; */
 }
 .swagger-section #header form#api_selector .input input#input_apiKey {
     width: 200px;
@@ -1255,10 +1256,12 @@
     width: 400px;
 }
 .swagger-section #header form#api_selector .input a#explore {
-    display: block;
+    display: inline-block;
+    margin-top: -0.5px;
     text-decoration: none;
     font-weight: 300;
-    padding: 6px 8px;
+    padding: 10px 15px;
+    height: px;
     font-size: 0.9em;
     color: white;
     background-color: #8899a6;
@@ -1268,16 +1271,21 @@
     -ms-border-radius: 4px;
     -khtml-border-radius: 4px;
     border-radius: 4px;
+    border: none;
 }
 .swagger-section #header form#api_selector .input a#explore:hover {
-    background-color: #547f00;
+    background-color: #1c6399;
+    /*background-color: #547f00;*/
 }
 .swagger-section #header form#api_selector .input input {
     font-size: 0.9em;
     padding: 3px;
-    margin: 0;
+    margin: 0px 0px 15px 0px;
     font-family:  Century Gothic, sans-serif;
     font-weight:  300;
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
 }
 .swagger-section #content_message {
     margin: 10px 15px;
@@ -1288,4 +1296,49 @@
     min-height: 30px;
     text-align: center;
     padding-top: 10px;
+}
+img#finchLogo {
+    width: 20%;
+    height: auto;
+    display: block;
+    padding: 10px 10px 10px 10px;
+    margin: 0px 0px 0px 190px;
+}
+
+a#logo {
+    /* float: right; */
+    text-align: center;
+}
+
+form#api_selector {
+    display: block;
+    /* position: static; */
+}
+
+a#logo {
+    display: block;
+    margin: -140px 0px 110px 0px;
+    /* padding: 10px 10px 10px 10px; */
+    right: 0px;
+    left: 0px;
+}
+
+form#api_selector {
+    padding: 10px 10px 10px 10px;
+    margin: -50px auto 0px auto;
+    align: center;
+    right: 0;
+    left: 0;
+    width: 85%;
+    /* float: right; */
+}
+h3#subheader {
+    color: white;
+    font-stretch: ultra-expanded;
+    font-family: garamond, serif;
+    font-size: 1.2em;
+    font-weight: 100;
+    margin: -130px 0px 50px 440px;
+    float: left;
+    /* font-stretch: ultra-expanded; */
 }
