@@ -78,24 +78,30 @@ class PetstoreDb {
     inputPet.id match {
       case Some(_) => Future.exception(InvalidInput("New pet should not contain an id"))
       case None => pets.synchronized {
-        val id = if (pets.isEmpty) 0 else pets.keys.max + 1
-//        pets(id) = inputPet.copy(id = Some(id))
+        val genId = if (pets.isEmpty) 0 else pets.keys.max + 1
 
-        val updatedTagsFut: Future[Seq[Tag]] = inputPet.tags match {
-          case Some(tagList) => Future.collect(tagList.map(addTag))
+        val updatedTagsFut: Future[Seq[Tag]] = inputPet.tags match{ //Future[Seq[Tag]]
+          case Some(tagList) => {
+            Future.collect(tagList.map(addTag))
+          }
           case None => Future.Nil
         }
 
-        inputPet.category match {
-
+        inputPet.category match{ //Future[Category]
+          case Some(c) => {
+            for {
+              updatedTags <- updatedTagsFut
+              updatedCat <- addCat(c)
+            } yield pets(genId) = inputPet.copy(id = Some(genId), tags = Some(updatedTags), category = Some(updatedCat))
+          }
+          case None => {
+            for {
+              updatedTags <- updatedTagsFut
+            } yield pets(genId) = inputPet.copy(id = Some(genId), tags = Some(updatedTags))
+          }
         }
 
-        inputPet.category match{
-          case Some(c) => addCat(c)
-          case None => None
-        }
-
-        Future.value(id)
+        Future.value(genId)
       }
     }
 
