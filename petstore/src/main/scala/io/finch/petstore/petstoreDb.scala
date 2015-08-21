@@ -149,6 +149,12 @@ class PetstoreDb {
    * @return A sequence of Pets that contain all given Tags.
    */
   def findPetsByTag(findTags: Seq[String]): Future[Seq[Pet]] = {
+    val matches: Seq[Boolean] = for {
+      s <- findTags
+      t <- tags.values
+    } yield t.name.equals(s)
+    val result = matches.filter(_ == true)
+    if (result.length < findTags.length) throw InvalidInput("A tag you're looking for doesn't exist!")
     val matchPets = for {
       p <- pets.values
       tagList <- p.tags
